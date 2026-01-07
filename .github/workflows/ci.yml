@@ -13,8 +13,6 @@ jobs:
   # --------------------
   tests:
     runs-on: ubuntu-latest
-    outputs:
-      test-result: ${{ steps.set-output.outputs.result }}
     steps:
       # 1️⃣ Checkout du code
       - name: Checkout repository
@@ -36,7 +34,7 @@ jobs:
       # 4️⃣ Lancer les tests et générer tous les rapports
       - name: Run tests and generate reports
         id: run-tests
-        continue-on-error: true  # ne stoppe pas le workflow si tests échouent
+        continue-on-error: true   # permet de continuer pour collecter artifacts
         run: |
           pytest -v \
             --junitxml=report.xml \
@@ -57,12 +55,12 @@ jobs:
             logs.txt
 
   # --------------------
-  # 2️⃣ Job Collecte Artifacts si tests échouent
+  # 2️⃣ Collecter artifacts si tests échouent
   # --------------------
   collect-artifacts:
     runs-on: ubuntu-latest
     needs: tests
-    if: failure()  # ne s'exécute que si tests échouent
+    if: failure()   # ne s'exécute que si tests échouent
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v3
@@ -71,11 +69,11 @@ jobs:
 
       - name: Debug info
         run: |
-          echo "Tests failed! Artifacts downloaded for debugging."
+          echo "❌ Tests failed! Artifacts downloaded for debugging."
           ls -R
 
   # --------------------
-  # 3️⃣ Job Deploy si tests réussissent
+  # 3️⃣ Déployer uniquement si tests réussissent
   # --------------------
   deploy:
     runs-on: ubuntu-latest
@@ -87,6 +85,9 @@ jobs:
 
       - name: Deploy application
         run: |
-          echo "All tests passed ✅"
-          echo "Here you can put your real deployment commands"
-          # Exemples : scp, docker push, kubectl apply, etc.
+          echo "✅ All tests passed. Deploying application..."
+          # Ici tu mets tes commandes de déploiement réelles
+          # Exemples :
+          # scp -r ./app user@server:/var/www/
+          # docker build -t myapp .
+          # docker push myapp:latest
