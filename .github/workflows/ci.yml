@@ -47,5 +47,5 @@ jobs:
             report.xml
             report.html
             coverage.xml
-            htmlcov
+            htmlcov/**
             logs.txt
