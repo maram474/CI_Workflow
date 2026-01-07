@@ -78,16 +78,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: tests
-    if: success()  # ne s'exécute que si tests réussissent
+    if: success()
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy application
-        run: |
-          echo "✅ All tests passed. Deploying application..."
-          # Ici tu mets tes commandes de déploiement réelles
-          # Exemples :
-          # scp -r ./app user@server:/var/www/
-          # docker build -t myapp .
-          # docker push myapp:latest
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./htmlcov
+          publish_branch: gh-pages
