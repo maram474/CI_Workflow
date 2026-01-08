@@ -79,12 +79,12 @@ jobs:
         with:
           server_address: ${{ secrets.SMTP_SERVER }}
           server_port: ${{ secrets.SMTP_PORT }}
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
+          username: ${{ secrets.EMAIL_USER }}
+          password: ${{ secrets.EMAIL_PASS }}
           subject: >
             CI Result - ${{ github.repository }} - ${{ job.status }}
-          to: ${{ secrets.EMAIL_TO }}
-          from: GitHub Actions <${{ secrets.SMTP_USERNAME }}>
+          to: ${{ secrets.EMAIL_CC }}
+          from: GitHub Actions <${{ secrets.EMAIL_USER }}>
           body: |
             Bonjour,
 
